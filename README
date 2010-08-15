@@ -1,8 +1,15 @@
 The goal of this plugin is to create something very similar to the iTunes smart playlist concept, but for any ActiveRecord model.
 
+    class Industry < ActiveRecord::Base
+      has_many :companies
+    end
+
     class Company < ActiveRecord::Base
+      belongs_to :industry
+
       acts_as_smart_filterable :name => :string,
         :number_of_employees => :integer,
         :rating => :decimal,
-        :created_at => :date
+        :created_at => :date,
+        :industries_name => :string
     end
