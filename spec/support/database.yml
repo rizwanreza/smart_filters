@@ -1,0 +1,17 @@
+sqlite3:
+  :adapter: sqlite3
+  :database: vendor/plugins/smart_filters/spec/smart_filters_plugin.sqlite3.db
+
+# postgresql:
+#   :adapter: postgresql
+#   :username: postgres
+#   :password: postgres
+#   :database: yaffle_plugin_test
+#   :min_messages: ERROR
+
+mysql:
+  :adapter: mysql
+  :host: localhost
+  :username: root
+  :password: 
+  :database: smart_filters_plugin_test

@@ -1,0 +1,15 @@
+<table>
+  <tr>
+    <% @filtered_results.first.attributes.each do |column, value| %>
+      <th><%= column.humanize %></th>
+    <% end %>
+  </tr>
+
+  <% @filtered_results.each do |record| %>
+    <tr>
+      <% record.attributes.each do |attribute, value| %>
+        <td><%=h value %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
