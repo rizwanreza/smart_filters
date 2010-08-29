@@ -1,8 +1,8 @@
 require "spec_helper"
-include ViewHelpers
-include ActionView::Helpers
 
 describe ViewHelpers do
+  include ViewHelpers
+
   before do
     stub_chain(:capture).and_return("")
     ViewHelpers.stub(:concat).with(:html).and_return(:html)
