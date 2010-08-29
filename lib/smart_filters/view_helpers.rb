@@ -33,8 +33,8 @@ module ViewHelpers
   end
 
   def criteria_options(model, column)
-    if model.columns_hash[column].type == :string or model.columns_hash[column].type == :text
-      html = content_tag(:option, :value => "contains") do
+    if model.columns_hash[column].type == :string || model.columns_hash[column].type == :text
+      html ||= content_tag(:option, :value => "contains") do
         "Contains"
       end
       html << content_tag(:option, :value => "does_not_contain") do
@@ -48,6 +48,19 @@ module ViewHelpers
       end
       html << content_tag(:option, :value => "ends_with") do
         "Ends with"
+      end
+    elsif model.columns_hash[column].type == :integer
+      html ||= content_tag(:option, :value => "equals_to") do
+        "Equals to"
+      end
+      html << content_tag(:option, :value => "greater_than") do
+        "Greater than"
+      end
+      html << content_tag(:option, :value => "less_than") do
+        "Less than"
+      end
+      html << content_tag(:option, :value => "between") do
+        "Between"
       end
     end
     html
