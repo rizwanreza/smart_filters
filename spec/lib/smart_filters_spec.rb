@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe SmartFilter do
   before(:all) do
-    load_schema
     class AddressBook < ActiveRecord::Base; end
   end
 

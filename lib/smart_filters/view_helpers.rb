@@ -3,11 +3,11 @@ module ViewHelpers
     body = capture(&block)
     html = ""
     html << "<form action='/address_books' method='get'>"
-    html << "<input type='hidden' name='smart_filter[model]' value='#{model}'>"
+    html << "<input type='hidden' id='model' name='smart_filter[model]' value='#{model}'>"
     columns(model, cols).each do |column|
       
       html << content_tag(:label, column.capitalize, :for => "#{column}")
-      html << content_tag(:select, :name => "smart_filter[#{column}][criteria]", :id => "name-criteria") do
+      html << content_tag(:select, :name => "smart_filter[#{column}][criteria]", :id => "#{column}-criteria") do
         criteria_options(model, column)
       end
       html <<  tag("input", { :type => 'text', :name => "smart_filter[#{column}][value]", :placeholder => "String" })

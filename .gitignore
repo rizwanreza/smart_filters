@@ -1,1 +1,2 @@
 spec/support/debug.log
+spec/*.db
