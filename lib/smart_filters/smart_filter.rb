@@ -21,16 +21,16 @@ module SmartFilter
       end
     end
     return find(:all, 
-                :conditions => conditions)
+                :conditions => conditions(@conds))
   end
 
   private
 
-  def conditions
-    @conds.flatten!
+  def conditions(conds)
+    conds.flatten!
     @final = []
     @terms = []
-    @conds.each_with_index do |condition, index|
+    conds.each_with_index do |condition, index|
       if (index + 1) % 2 == 0
         if condition.is_a?(Hash)
           @terms << condition.to_a.flatten

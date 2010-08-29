@@ -6,6 +6,28 @@ describe SmartFilter do
     class AddressBook < ActiveRecord::Base; end
   end
 
+  describe ".contains" do
+    it "returns a condition compatible array given column_name and term" do
+      AddressBook.send(:contains, 'name', 'hello').should == ["name LIKE ?", "%hello%"]
+    end
+  end
+
+  describe ".between" do
+    it "returns a condition compatible array given column_name and term" do
+      AddressBook.send(:between, 'id', '4', '7').should == ["id BETWEEN ? AND ?", {'4' => '7'}]
+    end
+  end
+
+  describe ".conditions" do
+    context "when given an array of conditions and arguments" do
+      let(:unmerged_conditions) { [["name LIKE ?", "%hello%"], ["id BETWEEN ? AND ?", {'4' => '7'}], ["name NOT LIKE ?", "%hello%"]] }
+      
+      it "returns a merged array of all conditions in the first element joined with 'AND' and the arguments in the rest" do
+        AddressBook.send(:conditions, unmerged_conditions).should == ["name LIKE ? AND id BETWEEN ? AND ? AND name NOT LIKE ?", "%hello%", "4", "7", "%hello%"]
+      end
+    end
+  end
+
   describe ".smart_filter" do
     let(:bob) { Factory(:address_book, :name => "Bob Martin", :zipcode => 12345) }
     let(:david) { Factory(:address_book, :name => "David Henderson", :zipcode => 12347) }
@@ -30,8 +52,6 @@ describe SmartFilter do
       it "returns the record matching all the criteria" do
         AddressBook.smart_filter({:name => {"contains" => "Bob"},
                                   :address => {"contains" => "Abracarab"}}).should be_empty
-        puts AddressBook.smart_filter({:name => {"contains" => "Bob"},
-                                  :name => {"contains" => "Martin"}}).inspect
         AddressBook.smart_filter({:name => {"contains" => "Bob"},
                                   :name => {"contains" => "Martin"}}).should have(1).item
       end
