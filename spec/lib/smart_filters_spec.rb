@@ -138,7 +138,37 @@ describe SmartFilter do
     end
 
     context "when the column to apply smart filtering is date or date/time" do
-      
+
+      context "when the criteria is on" do
+        let(:matz) { Factory(:address_book, :name => "Yukihiro Matsumoto", :created_at => Time.now.localtime.strftime("%Y-%m-%d")) }
+
+        before { matz.save! }
+
+        it "returns records with column corresponding on the given date" do
+          AddressBook.smart_filter({:created_at => {"on" => Time.now.localtime.strftime("%Y-%m-%d")}}).should have_at_least(1).item
+        end
+      end
+
+      context "when the criteria is before" do
+        let(:flanagan) { Factory(:address_book, :name => "David Flanagan", :created_at => Time.now.localtime.strftime("1980-%m-%d")) }
+
+        before { flanagan.save! }
+
+        it "returns records with column that corresponds before the given date" do
+          AddressBook.smart_filter({:created_at => {"before" => Time.now.localtime.strftime("%Y-%m-%d")}}).should have_at_least(1).item
+        end
+      end
+
+      context "when the criteria is after" do
+        let(:obie) { Factory(:address_book, :name => "Obie Fernandez", :created_at => Time.now.localtime.strftime("2090-%m-%d")) }
+
+        before { obie.save! }
+
+        it "returns records with column that corresponds after the given date" do
+          AddressBook.smart_filter({:created_at => {"after" => Time.now.localtime.strftime("2090-%m-%d")}}).should have_at_least(1).item
+        end
+      end
+
     end
 
   end

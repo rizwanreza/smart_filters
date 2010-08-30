@@ -63,6 +63,19 @@ module ViewHelpers
       html << content_tag(:option, :value => "between") do
         "Between"
       end
+    elsif model.columns_hash[column].type == :datetime || model.columns_hash[column].type == :date
+      html ||= content_tag(:option, :value => "on") do
+        "On"
+      end
+      html << content_tag(:option, :value => "before") do
+        "Before"
+      end
+      html << content_tag(:option, :value => "after") do
+        "After"
+      end
+      html << content_tag(:option, :value => "between") do
+        "Between"
+      end
     end
     html
   end

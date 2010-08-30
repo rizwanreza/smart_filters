@@ -43,11 +43,8 @@ describe ViewHelpers do
       end
     end
 
-    it "renders a generic partial" do
-    end
+    it "renders a generic partial when no argument is given"
 
-    it "should be able to allow custom partial rendering" do
-      
-    end
+    it "renders a custom partial given explicit argument"
   end
 end

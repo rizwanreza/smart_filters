@@ -15,6 +15,9 @@ module SmartFilter
         when "between"          then @conds << between(column.name, 
                                                       options[column.name.to_sym]["between"].first, 
                                                       options[column.name.to_sym]["between"].last)
+        when "on"               then @conds << on(column.name, options[column.name.to_sym]["on"])
+        when "before"           then @conds << before(column.name, options[column.name.to_sym]["before"])
+        when "after"            then @conds << after(column.name, options[column.name.to_sym]["after"])
         else
           return []
         end
@@ -76,5 +79,17 @@ module SmartFilter
 
   def less_than(column, term)
     ["#{column} < ?", term]
+  end
+
+  def on(column, term)
+    ["#{column} LIKE ?", "#{term}%"]
+  end
+
+  def before(column, term)
+    ["#{column} < ?", "#{term}"]
+  end
+
+  def after(column, term)
+    ["#{column} > ?", "#{term}"]
   end
 end
