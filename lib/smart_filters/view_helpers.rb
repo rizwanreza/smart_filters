@@ -1,11 +1,11 @@
 module ViewHelpers
-  def smart_filter(model, cols, &block)
+  def smart_filter(model, cols, partial = 'shared/filtered_results', locals = {}, &block)
     body = capture(&block)
     html = ""
     html << "<form action='/address_books' method='get'>"
     html << "<input type='hidden' id='model' name='smart_filter[model]' value='#{model}'>"
     columns(model, cols).each do |column|
-      
+
       html << content_tag(:label, column.capitalize, :for => "#{column}")
       html << content_tag(:select, :name => "smart_filter[#{column}][criteria]", :id => "#{column}-criteria") do
         criteria_options(model, column)
@@ -15,7 +15,8 @@ module ViewHelpers
     end
     html << "<input type='submit'>"
     html << "</form>"
-    html << render(:partial => 'shared/filtered_results') if @filtered_results
+
+    html << render(:partial => partial, :locals => locals) if @filtered_results
     html << body unless @filtered_results
     concat html
   end

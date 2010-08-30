@@ -34,7 +34,7 @@ describe ViewHelpers do
       end
     end
 
-    context "when the second argument is an array of columns" do
+    context "when the second argument is an array of column names" do
       let(:smart_filter_helper) { smart_filter(AddressBook, ['name'])}
       let(:text_field_name_attributes) { smart_filter_helper.scan(/<input\b(?>\s+(?:id="([^"]*)"|name="([^"]*)")|[^\s>]+|\s+)*>/).flatten.compact }
 
@@ -44,7 +44,6 @@ describe ViewHelpers do
     end
 
     it "renders a generic partial" do
-      
     end
 
     it "should be able to allow custom partial rendering" do
