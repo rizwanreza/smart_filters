@@ -1,33 +1,35 @@
 module SmartFilter
+
   def smart_filter(options)
-    @conds = []
     columns.each do |column|
-      if options[column.name.to_sym]
-        case options[column.name.to_sym].keys.first
-        when "contains"         then @conds << contains(column.name, options[column.name.to_sym]["contains"])
-        when "does_not_contain" then @conds << does_not_contain(column.name, options[column.name.to_sym]["does_not_contain"])
-        when "is"               then @conds << is(column.name, options[column.name.to_sym]["is"])
-        when "starts_with"      then @conds << starts_with(column.name, options[column.name.to_sym]["starts_with"])
-        when "ends_with"        then @conds << ends_with(column.name, options[column.name.to_sym]["ends_with"])
-        when "equals_to"        then @conds << equals_to(column.name, options[column.name.to_sym]["equals_to"])
-        when "greater_than"     then @conds << greater_than(column.name, options[column.name.to_sym]["greater_than"])
-        when "less_than"        then @conds << less_than(column.name, options[column.name.to_sym]["less_than"])
-        when "between"          then @conds << between(column.name, 
-                                                      options[column.name.to_sym]["between"].first, 
-                                                      options[column.name.to_sym]["between"].last)
-        when "on"               then @conds << on(column.name, options[column.name.to_sym]["on"])
-        when "before"           then @conds << before(column.name, options[column.name.to_sym]["before"])
-        when "after"            then @conds << after(column.name, options[column.name.to_sym]["after"])
-        else
-          return []
-        end
-      end
+      @conds = generate_sql(column, options[column.name.to_sym]) if options[column.name.to_sym]
     end
-    return find(:all, 
-                :conditions => conditions(@conds))
+
+    @conds.empty? ? (return []) : (return find(:all, :conditions => conditions(@conds)))
   end
 
   private
+
+  def generate_sql(column, criteria)
+    conditions = []
+    case criteria.keys.first
+    when "contains"         then conditions << contains(column.name, criteria["contains"])
+    when "does_not_contain" then conditions << does_not_contain(column.name, criteria["does_not_contain"])
+    when "is"               then conditions << is(column.name, criteria["is"])
+    when "starts_with"      then conditions << starts_with(column.name, criteria["starts_with"])
+    when "ends_with"        then conditions << ends_with(column.name, criteria["ends_with"])
+    when "equals_to"        then conditions << equals_to(column.name, criteria["equals_to"])
+    when "greater_than"     then conditions << greater_than(column.name, criteria["greater_than"])
+    when "less_than"        then conditions << less_than(column.name, criteria["less_than"])
+    when "between"          then conditions << between(column.name, 
+                                                  criteria["between"].first, 
+                                                  criteria["between"].last)
+    when "on"               then conditions << on(column.name, criteria["on"])
+    when "before"           then conditions << before(column.name, criteria["before"])
+    when "after"            then conditions << after(column.name, criteria["after"])
+    end
+    return conditions
+  end
 
   def conditions(conds)
     conds.flatten!

@@ -43,8 +43,8 @@ describe SmartFilter do
       AddressBook.smart_filter({:name => {"magic" => "abracadabra"}}).should == []
     end
     
-    it "returns all records if the column doesn't exist" do
-      AddressBook.smart_filter({:magician => {"magic" => "abracadabra"}}).should == AddressBook.find(:all)
+    it "returns an empty array if the column doesn't exist" do
+      AddressBook.smart_filter({:magician => {"magic" => "abracadabra"}}).should == []
     end
 
     context "when the argument contains more than one filter" do
