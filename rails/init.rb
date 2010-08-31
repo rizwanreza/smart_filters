@@ -1,1 +1,1 @@
-require 'smart_filters'
+require 'smart_filter'
