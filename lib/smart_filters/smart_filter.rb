@@ -12,6 +12,7 @@ module SmartFilter
 
   def generate_sql(column, criteria)
     conditions = []
+
     case criteria.keys.first
     when "contains"         then conditions << contains(column.name, criteria["contains"])
     when "does_not_contain" then conditions << does_not_contain(column.name, criteria["does_not_contain"])
@@ -28,24 +29,17 @@ module SmartFilter
     when "before"           then conditions << before(column.name, criteria["before"])
     when "after"            then conditions << after(column.name, criteria["after"])
     end
+
     return conditions
   end
 
   def conditions(conds)
-    conds.flatten!
-    @final = []
-    @terms = []
-    conds.each_with_index do |condition, index|
-      if (index + 1) % 2 == 0
-        if condition.is_a?(Hash)
-          @terms << condition.to_a.flatten
-        else
-          @terms << condition
-        end
-      elsif (index + 1) % 2 != 0
-        @final << condition
-      end
+    @final, @terms = [], []
+
+    conds.flatten!.each_with_index do |condition, index|
+      index.odd? ? @terms << condition.to_a.flatten : @final << condition
     end
+
     return [@final.join(' AND '), @terms].flatten
   end
 
